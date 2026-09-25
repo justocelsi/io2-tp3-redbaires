@@ -1,0 +1,11 @@
+# Los datos y el enunciado son de la cátedra: cada uno los baja del campus
+datos/*
+!datos/README.md
+*.zip
+*.pdf
+*.csv
+
+# Python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
