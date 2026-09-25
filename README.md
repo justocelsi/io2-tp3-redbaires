@@ -97,14 +97,20 @@ no cambia ninguna conclusión.
 
 ### D3 · Variables de decisión (la grilla pide al menos 2)
 
-| VD | Rango del CSV | Sobre qué actúa |
-|---|---|---|
-| Moderadores por turno *c* | 1 – 12 | capacidad → espera en cola → tiempo hasta la acción |
-| Límite de reenvíos: umbral y reducción | 1 – 20 · 0 – 0,9 | pasado el umbral, Λ × (1 − reducción) |
-| Degradación de alcance | 120 USD por cuenta y por día | el alcance de las cuentas detectadas (D11, D12) |
-| Agresividad del clasificador | precisión 0,5–0,95 · recall 0,3–0,9 | cuánto entra a la cola y qué parte es legítima. Capex de 250.000 USD |
+Los números salen de `parametros_y_costos.csv`, que da para cada parámetro un **valor base**
+(el de hoy) y un **rango** (lo que se puede evaluar). En la degradación y en el clasificador, lo
+que da el CSV es lo que **cuesta** la palanca, no cuánto se la mueve.
 
-Las tres primeras son las palancas del memo.
+| VD | Qué es | Hoy · rango | Lo que cuesta |
+|---|---|---|---|
+| Moderadores por turno *c* | cuántos revisan la cola a la vez | 1 · 1 a 12 | 22 USD/h × 720 h = 15.840 USD por moderador y por mes |
+| Límite de reenvíos: umbral | a partir de cuántos reenvíos acumulados de la publicación se aplica la fricción, estilo «reenviado muchas veces» de WhatsApp | 5 · 1 a 20 | — |
+| Límite de reenvíos: reducción | cuánto alcance pierde cada reenvío limitado. Con 0,9, llega al 10 %. En el modelo: Λ × (1 − reducción) | 0 · 0 a 0,9 (hoy no hay fricción) | 15 % del engagement legítimo (2 a 50 %) |
+| Degradación de alcance | bajarles el alcance a las cuentas grandes detectadas como coordinadas. **Cuánto y a quién no está en el CSV**: lo supone el grupo (D11, D12) | — | 120 USD por cuenta y por día (20 a 600), en reputación o por contrato |
+| Clasificador nuevo | reemplazar Centinela por uno con otra precisión (de lo que marca, cuánto es nocivo) y otro recall (de lo nocivo, cuánto marca) | precisión 0,72 · 0,5 a 0,95; recall 0,63 · 0,3 a 0,9 | capex 250.000 USD (80.000 a 900.000) + 60.000 por año, a 4 años y 10 %: ≈ 11.600 USD por mes, unos 0,7 moderadores |
+
+Las tres primeras son las palancas del memo. Los costos de esta tabla son costos de la
+decisión y van a la evaluación económica, no a las VR.
 
 ### D4 · Variables de referencia (al menos 2, contrapuestas)
 
