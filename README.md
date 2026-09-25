@@ -33,15 +33,16 @@ después.
 | Qué | Decisión | Cuándo | Por qué |
 |---|---|---|---|
 | Herramienta | Python, no AnyLogic | 13/8 | con tres entregas, el código se trabaja en paralelo y la experimentación del TP3C son cientos de corridas |
+| Nombres | la entidad es un sustantivo y el evento, un verbo: **la publicación** es la entidad y **publicar** es el evento que la crea. «Cascada» queda para el árbol de reenvíos de una publicación, que es lo que mide el dataset (`cascade_id`, una por `message_id`) | 25/9 | el enunciado llama «publicación original» a una fila del export; con el verbo para el evento no se confunde entidad con evento |
 | Qué puede ser una VR | **una variable de referencia es salida del simulador**: varía entre corridas y se informa con intervalo de confianza | 15/9 | el costo de los moderadores no es VR: con *c* moderadores, la nómina ya está determinada. Es costo de la decisión y va a la evaluación económica |
-| Entidad | **la cascada**, con el frente de reenvíos vivos como atributo | 22/9 | ver D1 |
-| Segunda entidad | **el ítem de moderación**, que nace en un split de Centinela | 22/9 | si la cascada hiciera la cola ella misma, dejaría de propagarse mientras espera, y en los datos eso no pasa |
+| Entidad | **la publicación**: la pieza de contenido original (`message_id`), con el frente de reenvíos vivos como atributo | 22/9 | ver D1 |
+| Segunda entidad | **el ítem de moderación**, que nace en un split de Centinela | 22/9 | si la publicación hiciera la cola ella misma, dejaría de propagarse mientras espera, y en los datos eso no pasa |
 
 ## 2. El modelo en una figura
 
 ```mermaid
 flowchart LR
-    A[Llegada de rumor<br/>exp con tasa por hora] -->|crea| B[Cascada<br/>frente g · n por tipo]
+    A[Publicar<br/>exp con tasa por hora] -->|crea| B[Publicación<br/>frente g · n por tipo]
     B --> C[Exposición<br/>0,15 × seguidores]
     C --> D[Reenvíos<br/>Λ = Σ nᵢ Rᵢ δ g]
     D --> E[Demora hasta g+1<br/>mediana 43 min]
@@ -52,31 +53,31 @@ flowchart LR
     H -.->|frente × 1 − fracción removida| D
 ```
 
-La fila de arriba es la cascada dando vueltas: se expone, genera el frente siguiente y espera
+La fila de arriba es la publicación dando vueltas: se expone, genera el frente siguiente y espera
 hasta la generación que viene, mientras le queden reenvíos. La de abajo es la moderación,
 que corre en paralelo sobre otra entidad. El TP se juega en la carrera entre las dos: la
-cascada salta de generación cada **43 minutos** y la moderación hoy tarda **139** en actuar.
+publicación salta de generación cada **43 minutos** y la moderación hoy tarda **139** en actuar.
 
 Las tres palancas entran así: los moderadores cambian *c*, el límite de reenvíos multiplica Λ
 y la degradación baja el alcance (D12 decide si el 0,15 o el R).
 
 ## 3. Modelo conceptual
 
-### D1 · ¿Qué es la entidad? — ✅ la cascada (22/9)
+### D1 · ¿Qué es la entidad? — ✅ la publicación (22/9; el nombre, 25/9)
 
 La consigna prohíbe una entidad por usuario y que la cantidad de entidades crezca con la
 difusión.
 
 | Opción | Entidades vivas | Qué pasa |
 |---|---|---|
-| El reenvío | crece con la cascada | 500 entidades en una cascada de 500. Viola la consigna |
-| **La cascada** | una por rumor activo | sea de 2 eventos o de 3 millones. Acumula sola tamaño, profundidad e impresiones, que es contra lo que hay que validar |
+| El reenvío | crece con la difusión | 500 entidades en una cascada de 500. Viola la consigna |
+| **La publicación**, con sus reenvíos como atributo | una por rumor activo | sea su cascada de 2 eventos o de 3 millones. Acumula sola tamaño, profundidad e impresiones, que es contra lo que hay que validar |
 | Un lote por generación | ≤ rumores × generaciones | muere antes de que llegue la remoción |
 
 El argumento es de tiempos. Hasta la acción pasan **139 minutos** y entre un reenvío y su
-hijo, **43**: cuando el moderador abre el ítem, la cascada avanzó unas tres generaciones. Por
+hijo, **43**: cuando el moderador abre el ítem, la publicación avanzó unas tres generaciones. Por
 eso el **89 %** de los hijos de un evento marcado ya nacieron cuando se actúa. Con el lote por
-generación, ese lote está muerto cuando llega la remoción y hay que ir a buscar la cascada
+generación, ese lote está muerto cuando llega la remoción y hay que ir a buscar la publicación
 igual.
 
 El costo, que hay que declarar: adentro de una generación no hay orden, y la remoción se
@@ -141,7 +142,7 @@ publicaciones buenas bajadas de lo que evita en daño; eso habrá que confirmarl
 |---|---|
 | **Ocupación de los moderadores (%)** | obligatoria: la pide la grilla |
 | Largo de la cola de moderación | explica el tiempo hasta la acción |
-| Cascadas vivas e ítems en revisión | prueba que el consumo queda acotado, como pide la consigna |
+| Publicaciones vivas e ítems en revisión | prueba que el consumo queda acotado, como pide la consigna |
 | R efectivo del momento | muestra por qué el sistema explota o se apaga |
 
 ⚠️ La grilla anula el punto del diagrama de relación entre variables si ahí se usan
@@ -231,14 +232,14 @@ separa: el 98 % aparece en más de tres cascadas, dentro y fuera de C2.
 | Opción | |
 |---|---|
 | El factor de impresiones (0,15) | menos gente la ve y, por eso, hay menos reenvíos |
-| El R de las cascadas detectadas | actúa directo sobre la propagación |
+| El R de las publicaciones detectadas | actúa directo sobre la propagación |
 | Los dos | un parámetro más |
 
 ### D13 · ¿Sobre qué actúa el límite de reenvíos?
 
 | Opción | |
 |---|---|
-| **Por pieza, con los reenvíos acumulados de la cascada** *(propuesta)* | la entidad ya lleva ese contador |
+| **Por pieza, con los reenvíos acumulados de la publicación** *(propuesta)* | la entidad ya lleva ese contador |
 | Por generación | más simple; no es lo que dice el memo |
 | Por cuenta | requiere seguir cuentas, cosa que la entidad elegida no hace |
 
@@ -300,11 +301,11 @@ censurada.
 | Hijos por tipo de cuenta | BROADCASTER 4,45 · CREATOR 3,65 · resto ~0,6 |
 | Hijos por superficie | DM 0,55 · STORY 0,77 · FEED 0,95 · REPOST 1,03 · GROUP 1,13 |
 | Impresiones / seguidores | ≈ 0,15 en los cinco tipos |
-| Semillas por franja horaria | ~95 de 2 a 4 h · ~280 de 10 a 19 h |
+| Tasa de «publicar» | 0,51 por hora a las 3 h · 1,62 a las 17 h · promedio 1,16 |
 | Eventos marcados por Centinela | 23 % |
 | Latencia de moderación | piso 90 · mediana 139 · p90 353 min |
 
-### D15 · ¿Cómo llegan los rumores?
+### D15 · ¿Cada cuánto ocurre «publicar»?
 
 | Opción | |
 |---|---|
@@ -328,7 +329,7 @@ p90 = 29 y p99 = 188, no el 5,1.
 | **Multinomial fija, y medir contra el p99 antes de complicarla** *(propuesta)* | simple, pero tiende a volver a la media |
 | Condicionada al tipo del padre | usa la matriz padre → hijo de los datos |
 
-Si cada frente se reparte con las proporciones de toda la población, la cascada vuelve al
+Si cada frente se reparte con las proporciones de toda la población, la publicación vuelve al
 promedio en una o dos generaciones y la cola larga se aplana. Lo que hace explotar una
 cascada es enganchar un BROADCASTER.
 
@@ -339,7 +340,7 @@ cascada es enganchar un BROADCASTER.
 | **Por generación, con δ(g) medido** *(propuesta)* | es lo que muestran los datos |
 | Por tiempo, con la vida media | es lo que dice el memo, pero `content_half_life_min` no correlaciona con el tamaño (Spearman 0,04) |
 
-### D19 · ¿Cuánto tarda la cascada en saltar de generación?
+### D19 · ¿Cuánto tarda la publicación en saltar de generación?
 
 Ajuste sobre los 60.754 tiempos positivos entre padre e hijo:
 
