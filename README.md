@@ -201,10 +201,22 @@ deducir la escala, hay que elegirla.
 | Por umbral de `toxicity_index` | hay que elegir y defender el umbral |
 | DISARM o toxicidad alta | más fiel, un parámetro más |
 
-Datos: se marca el 32–36 % de los temas DISARM y el 14–22 % de los ORG. Con DISARM, la
-precisión y el recall del log dan **0,57 y 0,34**; el CSV declara **0,72 y 0,63**. Ninguna
-definición los reproduce, así que los del CSV parecen ser la especificación del clasificador
-que se compraría, no el de hoy.
+**Por qué ninguna opción cierra con el CSV.** El CSV dice que Centinela tiene **precisión 0,72**
+(de lo que marca, el 72 % es nocivo) y **recall 0,63** (de lo nocivo, marca el 63 %). Con
+cualquier definición de nocivo se pueden medir esas dos cosas en el log, porque sabemos qué marcó:
+
+| Nocivo = | Precisión | Recall | % del contenido |
+|---|---|---|---|
+| DISARM | 0,57 | 0,34 | 40 % |
+| toxicidad ≥ 0,3 | 0,73 | 0,30 | 57 % |
+| toxicidad ≥ 0,7 | 0,10 | 0,42 | 6 % |
+| DISARM o toxicidad ≥ 0,5 | 0,67 | 0,32 | 48 % |
+
+El recall no llega a 0,63 con ninguna. El grupo más marcado de todos, los DISARM con toxicidad
+arriba de 0,9, lo marcan el **51 %** de las veces, así que ninguna definición puede dar más. O esos
+números no describen al Centinela de hoy (hipótesis: son la especificación del clasificador que se
+compraría, D3) o la marca del log no es sólo Centinela. Es pregunta para el tutor. Mientras tanto,
+la definición se elige por lo que se pueda defender.
 
 ### D9 · ¿Hay prioridad en la cola?
 
