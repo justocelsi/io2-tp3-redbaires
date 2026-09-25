@@ -38,6 +38,31 @@ después.
 | Entidad | **la publicación**: la pieza de contenido original (`message_id`), con el frente de reenvíos vivos como atributo | 22/9 | ver D1 |
 | Segunda entidad | **el ítem de moderación**, que nace en un split de Centinela | 22/9 | si la publicación hiciera la cola ella misma, dejaría de propagarse mientras espera, y en los datos eso no pasa |
 
+## Elecciones de Justo (25/9), falta el resto del grupo
+
+| D | Elección | Comentario |
+|---|---|---|
+| D1 | la publicación, con el frente como atributo | |
+| D2 | sólo los moderadores | |
+| D3 | moderadores · límite de reenvíos · degradación · clasificador nuevo | la degradación como variable **binaria**: se aplica o no. Asociarle un costo al engagement legítimo degradado |
+| D4 | impresiones nocivas servidas · impresiones legítimas perdidas | modelar un costo para las dos. Pensar si un costo total también tiene que ser VR, porque si no nada impide elegir el mejor clasificador |
+| D5 | ocupación · largo de la cola · publicaciones vivas e ítems en revisión | supuesto: todos los moderadores trabajan igual |
+| D6 | un mes y el peor episodio | |
+| D7 | calibrar a 139 min | el clasificador no tiene cola: toda la latencia es moderación |
+| D8 | DISARM | |
+| D9 | FIFO y prioridad como escenario | también por los otros factores de la consigna, como los temas sensibles |
+| D10 | fraccional | ¿la probabilidad es fija o tiene distribución? |
+| D11 | C2 + cuenta nueva, con error | |
+| D12 | el factor de impresiones | |
+| D13 | por pieza | |
+| D14 | sacarlas y cortar en 500 | |
+| D15 | exponencial con tasa por hora y día | |
+| D16 | Poisson(Λ) | |
+| D17 | multinomial fija, y medir contra el p99 | |
+| D18 | por generación | |
+| D19 | gamma (0,55; 128 min) | |
+| D20 | Erlang(k, ~20 s) | |
+
 ## 2. El modelo en una figura
 
 ```mermaid
