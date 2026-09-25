@@ -175,16 +175,23 @@ Criterio para cerrarlos sin discutir de más, en orden:
 
 ### D7 · ¿Cuál es la escala? 🔴 bloquea la cola
 
-La muestra es un recorte de una plataforma de 7,8 M de usuarios diarios. Con sus volúmenes
-entran 86 ítems marcados por día y un moderador revisa 4.320 (a 20 s cada uno): trabaja al
-**2 %**. La cola queda vacía, la palanca de los moderadores no mueve nada y la VE obligatoria
-queda clavada en 2 %.
+No se simulan usuarios en ninguna opción: las cuentas no son entidades. Lo que hay que fijar es
+**cuántas publicaciones por día** entran, o sea la tasa de «publicar», y con eso cuántos ítems
+marcados le llegan a la cola.
 
-| Opción | |
-|---|---|
-| **Calibrar el volumen a la latencia observada** *(propuesta)* | se sube el volumen hasta que, con la dotación de hoy, la espera mediana dé 139 min. Fija la escala y sirve de validación |
-| Simular la muestra tal cual | la primera palanca no tiene efecto |
-| Escalar por la proporción muestra / 7,8 M | hay que suponer qué fracción de la plataforma es la muestra |
+La muestra tiene 5.000 publicaciones en 180 días (~28 por día) y es un recorte de una plataforma
+de 7,8 M de usuarios diarios. Con ese volumen entran **86 ítems marcados por día** y un moderador,
+a ~20 s por ítem, revisa ~4.400: está ocupado el **2 %**. La cola queda vacía, la espera da cero y
+agregar moderadores no cambia nada. Pero en los datos se esperan 139 min.
+
+| Opción | Factor sobre la tasa | Qué pasa |
+|---|---|---|
+| **Calibrar a la latencia observada** *(propuesta)* | ≈ 50 | se sube la tasa hasta que, con el moderador de hoy, la espera mediana dé 139 min. Con M/M/1: ~1.400 publicaciones y ~4.300 ítems marcados por día, moderador al 99,8 %. Fija la escala y sirve de validación. Lo delicado: tan cerca del 100 %, un cambio chico en el volumen vacía o explota la cola |
+| Simular la muestra tal cual | 1 | moderador al 2 %, espera cero; no reproduce los 139 min y la palanca de moderadores no hace nada |
+| Escalar por cuentas (4.000 de 7,8 M) | ≈ 1.950 | ~167.000 ítems marcados por día contra ~4.400 por moderador: ocupación de 3.800 %, la cola crece sin límite. Habría que suponer también cuántos moderadores hay de verdad |
+
+Las dos formas de escalar difieren en un factor de 40: el tamaño de la muestra no alcanza para
+deducir la escala, hay que elegirla.
 
 ### D8 · ¿Qué cuenta como «nocivo»? 🔴 bloquea las VR
 
