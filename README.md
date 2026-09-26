@@ -38,20 +38,20 @@ después.
 | Entidad | **la publicación**: la pieza de contenido original (`message_id`), con el frente de reenvíos vivos como atributo | 22/9 | ver D1 |
 | Segunda entidad | **el ítem de moderación**, que nace en un split de Centinela | 22/9 | si la publicación hiciera la cola ella misma, dejaría de propagarse mientras espera, y en los datos eso no pasa |
 
-## Elecciones de Justo (25/9), falta el resto del grupo
+## Elecciones de Justo (25/9; D4, D7 y D10 cerradas el 26/9), falta el resto del grupo
 
 | D | Elección | Comentario |
 |---|---|---|
 | D1 | la publicación, con el frente como atributo | |
 | D2 | sólo los moderadores | |
 | D3 | moderadores · límite de reenvíos · degradación · clasificador nuevo | la degradación como variable **binaria**: se aplica o no. Asociarle un costo al engagement legítimo degradado |
-| D4 | impresiones nocivas servidas · impresiones legítimas perdidas | modelar un costo para las dos. Pensar si un costo total también tiene que ser VR, porque si no nada impide elegir el mejor clasificador |
+| D4 | impresiones nocivas servidas · impresiones legítimas perdidas | ✅ 26/9: el costo total **no es VR**, es el **criterio de decisión** del plan de experimentación (nocivas × 0,0059 + legítimas perdidas × 0,0009 + buenas bajadas × 1,50 + ítems × 0,12 + cuentas-día × 120 + nómina + clasificador). Las publicaciones buenas bajadas se informan aparte, dentro del costo |
 | D5 | ocupación · largo de la cola · publicaciones vivas e ítems en revisión | supuesto: todos los moderadores trabajan igual |
 | D6 | un mes y el peor episodio | |
-| D7 | calibrar a 139 min | el clasificador no tiene cola: toda la latencia es moderación |
+| D7 | calibrar a 139 min | ✅ 26/9: **demora fija de 90 min + cola**; se calibra sólo la espera por encima del piso (mediana 49 min). Da ocupación 99,5 % y ≈ 50 veces el volumen de la muestra |
 | D8 | DISARM | |
 | D9 | FIFO y prioridad como escenario | también por los otros factores de la consigna, como los temas sensibles |
-| D10 | fraccional | ¿la probabilidad es fija o tiene distribución? |
+| D10 | fraccional | ✅ 26/9: **supuesto declarado con sensibilidad**: p = toxicidad × 1,5 en temas sensibles (DISARM, POL, HLTH) o × 1, a la mitad si es verificada; sensibilidad 0,5 a 1,5 veces |
 | D11 | C2 + cuenta nueva, con error | |
 | D12 | el factor de impresiones | |
 | D13 | por pieza | |
