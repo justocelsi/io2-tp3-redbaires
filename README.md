@@ -275,7 +275,7 @@ después de la acción, así que no todo lo marcado se remueve.
 
 Datos: el sufijo `-C2` de `hashtag_cluster_ref` (514 cascadas) da cascadas de **42,8**
 eventos contra ~10 y **13 %** de cuentas nuevas contra 6 %. La huella de dispositivo no
-separa: el 98 % aparece en más de tres cascadas, dentro y fuera de C2.
+separa: el 99,9 % aparece en más de tres cascadas, dentro y fuera de C2.
 
 ### D12 · ¿Qué baja la degradación?
 
@@ -318,11 +318,12 @@ perdió y reconstruirla es parte de la nota.
 | Problema | Cuántos |
 |---|---|
 | Filas duplicadas | 132 |
-| Mayúsculas mezcladas en formato, superficie e idioma (`es` · `ES` · `es-AR`) | ~13.850 celdas |
-| Faltantes: `dwell_time_sec` 2.008 · `sentiment_score` 1.347 · `device_fingerprint_code` 1.327 · `comments` 937 · `content_half_life_min` 667 · `impressions` 625 | 7 columnas |
+| Mayúsculas mezcladas en formato, superficie e idioma (`es` · `ES` · `es-AR`) | 13.824 celdas |
+| Faltantes: `dwell_time_sec` 2.005 · `sentiment_score` 1.344 · `device_fingerprint_code` 1.324 · `comments` 936 · `content_half_life_min` 666 · `impressions` 625 | 7 columnas |
 | Fechas en 2099 | 39 |
-| Hijos anteriores al padre | 39 |
-| Cuentas más viejas que la plataforma (opera desde 2013) | 514 |
+| `inter_event_time_min` negativo, con las fechas de padre e hijo en orden | 39 |
+| Hijos con fecha anterior a la del padre: son los hijos de los eventos de 2099 | 22 |
+| Eventos de cuentas más viejas que la plataforma (opera desde 2013) | 514, de 36 cuentas |
 | Latencia de moderación mayor a 24 h | 196 |
 | `dwell_time_sec` negativo | 66 |
 | Cuentas con 0 seguidores | 52 |
@@ -346,10 +347,10 @@ censurada.
 | Tamaño: mediana · p90 · p99 · máx | 2 · 29 · 188 · 500 |
 | Hijos por evento (R), sin las truncadas | **0,916** |
 | Lo mismo por 1 − 1/tamaño medio | 0,916: el proceso es subcrítico |
-| Varianza / media de los hijos | 5,1: no es Poisson simple |
-| Hijos por generación | 2,39 · 1,04 · 0,91 · 0,85 · 0,67 · … · 0,37 |
-| Hijos por tipo de cuenta | BROADCASTER 4,45 · CREATOR 3,65 · resto ~0,6 |
-| Hijos por superficie | DM 0,55 · STORY 0,77 · FEED 0,95 · REPOST 1,03 · GROUP 1,13 |
+| Varianza / media de los hijos | 5,1 (4,8 sin las truncadas): no es Poisson simple |
+| Hijos por generación | 2,35 · 1,00 · 0,85 · 0,78 · 0,68 · … · 0,37 |
+| Hijos por tipo de cuenta | BROADCASTER 4,44 · CREATOR 3,52 · resto ~0,6 |
+| Hijos por superficie | DM 0,55 · STORY 0,76 · FEED 0,94 · REPOST 1,03 · GROUP 1,12 |
 | Impresiones / seguidores | ≈ 0,15 en los cinco tipos |
 | Tasa de «publicar» | 0,51 por hora a las 3 h · 1,62 a las 17 h · promedio 1,16 |
 | Eventos marcados por Centinela | 23 % |
