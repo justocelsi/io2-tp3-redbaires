@@ -45,10 +45,10 @@ después.
 | D1 | la publicación, con el frente como atributo | |
 | D2 | sólo los moderadores | |
 | D3 | moderadores · límite de reenvíos · degradación · clasificador nuevo | la degradación como variable **binaria**: se aplica o no. Asociarle un costo al engagement legítimo degradado |
-| D4 | impresiones nocivas servidas · impresiones legítimas perdidas | ✅ 26/9: el costo total **no es VR**, es el **criterio de decisión** del plan de experimentación (nocivas × 0,0059 + legítimas perdidas × 0,0009 + buenas bajadas × 1,50 + ítems × 0,12 + cuentas-día × 120 + nómina + clasificador). Las publicaciones buenas bajadas se informan aparte, dentro del costo |
+| D4 | impresiones nocivas servidas · impresiones legítimas perdidas | ✅ 26/9: el costo total **no es VR**, es el **criterio de decisión** del plan de experimentación (nocivas × 0,0059 + legítimas perdidas × 0,0009 + buenas bajadas × 1,50 + ítems × 0,12 + cuentas-día × 120 + nómina + clasificador). Las publicaciones buenas bajadas se informan aparte, dentro del costo · ✅ 30/9: las dos VR quedan; el costo fijo (nómina, clasificador) pesa en la decisión pero no es VR |
 | D5 | ocupación · largo de la cola · publicaciones vivas e ítems en revisión | supuesto: todos los moderadores trabajan igual |
 | D6 | un mes y el peor episodio | |
-| D7 | calibrar a 139 min | ✅ 26/9: **demora fija de 90 min + cola**; se calibra sólo la espera por encima del piso (mediana 49 min). Da ocupación 99,5 % y ≈ 50 veces el volumen de la muestra |
+| D7 | calibrar a 139 min | ✅ 26/9: **demora fija de 90 min + cola**; se calibra sólo la espera por encima del piso (mediana 49 min). Da ocupación 99,5 % y ≈ 50 veces el volumen de la muestra · ✅ 30/9: se queda la cola; la escala 50× y el segundo moderador valen, pero no reproduce que la latencia no suba en el pico: limitación declarada para el TP3B |
 | D8 | DISARM | |
 | D9 | FIFO y prioridad como escenario | también por los otros factores de la consigna, como los temas sensibles |
 | D10 | fraccional | ✅ 26/9: **supuesto declarado con sensibilidad**: p = toxicidad × 1,5 en temas sensibles (DISARM, POL, HLTH) o × 1, a la mitad si es verificada; sensibilidad 0,5 a 1,5 veces |
