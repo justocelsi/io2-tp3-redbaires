@@ -9,6 +9,9 @@ Por ahora el repo tiene sólo este README: lo decidido, lo que falta decidir con
 cada decisión, los supuestos y el modelo de datos. El código y el notebook de EDA vienen
 después.
 
+> **Lunes 12/10/2026: la parte B (el simulador) está en [`parte-b/`](parte-b/README.md)**, en versión
+> preliminar para revisar en grupo. Lo de abajo es el estado de la parte A y no cambió.
+
 **Estado al viernes 25/9/2026.**
 
 | Entrega | Qué se produce | Vence |
