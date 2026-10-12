@@ -9,3 +9,9 @@ datos/*
 __pycache__/
 .ipynb_checkpoints/
 .venv/
+
+# Parte A: la plantilla de Word es de la cátedra
+parte-a/25C2-GXX-MC-TITULO.docx
+parte-a/numeros.txt
+# el informe sí se sube
+!parte-a/*.pdf

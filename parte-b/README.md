@@ -1,7 +1,7 @@
 # Parte B · el simulador (entrega del viernes 16/10, 12:00)
 
-Todo lo de la segunda entrega va en esta carpeta. Lo de la parte A (decisiones D1 a D20, modelo
-conceptual y de datos) sigue en el [README de la raíz](../README.md) y no se toca.
+Todo lo de la segunda entrega va en esta carpeta. Lo de la parte A (el informe entregado, las decisiones
+D1 a D20 y el modelo de datos) está en [`../parte-a/`](../parte-a/README.md).
 
 **Estado: versión preliminar, lunes 12/10.** El simulador corre de punta a punta y está en
 [`simulador.ipynb`](simulador.ipynb), con los resultados ya calculados para leerlo sin correrlo.
