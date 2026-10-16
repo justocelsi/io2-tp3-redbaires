@@ -11,6 +11,8 @@ Programamos el simulador en Python con la librería SimPy, que el tutor aceptó 
 
 ![Figura 1. Flujo del simulador. Arriba, el lazo de la publicación, que se repite una vez por generación; abajo, el recorrido del ítem de moderación. En cursiva, el bloque de AnyLogic equivalente. La flecha roja es la única vía por la que la moderación cambia la propagación.](figuras/b1_bloques.png){width=100%}
 
+Tabla 1. Equivalencia entre los bloques de AnyLogic y el simulador.
+
 | AnyLogic | En el simulador |
 |---|---|
 | *Agent type* con parámetros | un diccionario con los atributos de la publicación o del ítem |
@@ -34,7 +36,7 @@ En cada vuelta del lazo pasa el evento saltar de generación, con cuatro pasos:
 
 1. Se expone el frente: cada reenvío suma 0,15 × los seguidores de quien reenvía, sorteados de la muestra de su tipo de cuenta.
 2. Centinela marca *k* reenvíos, con *k* binomial y una probabilidad de marca que depende de si el tema es nocivo y del quintil de toxicidad (de 0,09 a 0,40). Si *k* > 0 nace un ítem de moderación.
-3. Se sortea el frente siguiente con un solo sorteo de Poisson de media Λ = Σ nᵢ Rᵢ δ(g) (1 − r)(1 − f), y los tipos de cuenta de los hijos con una multinomial. Rᵢ va de 0,58 a 4,44 según el tipo de cuenta y δ(g) baja de 2,33 en la semilla a 0,37 en la generación 11.
+3. Se sortea el frente siguiente con un solo sorteo de Poisson de media Λ = Σ nᵢ Rᵢ δ(g) · m · (1 − f), y los tipos de cuenta de los hijos con una multinomial. Rᵢ va de 0,58 a 4,44 según el tipo de cuenta y δ(g) baja de 2,33 en la semilla a 0,37 en la generación 11. Aquí *m* es el cociente entre los reenvíos medios de una publicación de campaña coordinada y de una orgánica, que sale de la muestra, y vale 1 si la publicación no es coordinada. Cuando Λ pasa de 300 el sorteo de Poisson se aproxima con una normal de media y varianza Λ.
 4. La publicación espera la demora entre generaciones, gamma de forma 0,55 y escala 128 minutos. Si no hubo hijos, sale del sistema.
 
 El ítem de moderación espera los 90 minutos fijos del piso de latencia, entra a la bandeja FIFO y espera un moderador libre. La revisión dura una Erlang de *k* fases de 20 segundos. Al terminar sorteamos cuántos de los *k* se remueven, con probabilidad toxicidad × 1,5 en temas sensibles y la mitad para la fracción de cuentas verificadas, y sumamos removidos / *n* a la fracción removida de la publicación. Desde la generación siguiente esa fracción achica Λ.
@@ -42,6 +44,8 @@ El ítem de moderación espera los 90 minutos fijos del piso de latencia, entra 
 Las otras dos palancas están en la misma fórmula. La fricción multiplica Λ por (1 − *r*) cuando los reenvíos acumulados pasan el umbral *u*, y cuenta como perdido el 15 % de las impresiones legítimas que se sirven después (dato del CSV de parámetros). La degradación detecta campañas con la precisión 0,21 y el recall 0,47 que medimos en la parte A, y multiplica el alcance y Λ de las detectadas por 1 − *d*. El clasificador nuevo reemplaza la probabilidad de marca por la que corresponde a su precisión y su recall.
 
 La lógica de la cola la probamos sola antes de juntarla con las publicaciones, con seis ítems marcados en minutos elegidos por nosotros y un moderador, como en el ejemplo de la clase 07. Los tres primeros llegan juntos y se ordenan uno detrás de otro, y ninguno sale antes de los 90 minutos:
+
+Tabla 2. Pase a mano de la cola de moderación con seis ítems.
 
 | Marcado (min) | *k* | Llega a la bandeja | Sale | Latencia (min) |
 |---|---|---|---|---|
@@ -62,7 +66,7 @@ Las dos variables de referencia de la parte A se calculan en el evento que las c
 
 ## Variables de estado
 
-Las tres variables de estado de la parte A son el largo de la cola, los moderadores ocupados y las publicaciones vivas. Las anotamos con su valor y el minuto en el momento en que cambian: cuando un ítem entra a la bandeja, cuando empieza y termina una revisión, y cuando nace y muere una publicación. No hay muestreo cada tanto. La ocupación es el promedio en el tiempo de los moderadores ocupados dividido por *c*.
+Las tres variables de estado que graficamos son el largo de la cola, los moderadores ocupados y las publicaciones vivas. Las anotamos con su valor y el minuto en el momento en que cambian: cuando un ítem entra a la bandeja, cuando empieza y termina una revisión, y cuando nace y muere una publicación. No hay muestreo cada tanto. La ocupación es el promedio en el tiempo de los moderadores ocupados dividido por *c*.
 
 ![Figura 2. Las tres variables de estado durante un día, con el moderador de hoy y el sistema vacío a la medianoche.](figuras/b2_dia.png){width=100%}
 
@@ -73,6 +77,8 @@ En la figura 2 se ve que de mañana el moderador alcanza y la cola casi no exist
 ## Stress test
 
 Corrimos una semana por escenario, con dos días de calentamiento y la misma semilla, moviendo una variable de decisión por vez.
+
+Tabla 3. Resultados del stress test, una semana por escenario.
 
 | Escenario | Nocivas servidas (millones) | Legítimas perdidas (millones) | Latencia mediana (min) | Cola máxima | Vivas, máximo |
 |---|---|---|---|---|---|
@@ -95,6 +101,8 @@ Hubo dos resultados que no esperábamos. La evaluación a priori decía que con 
 
 Además de los dos pases a mano, el de una publicación sola y el de la cola con seis ítems, dejamos en el notebook tres controles que corremos después de cada cambio. Si alguno falla, hay un error en el simulador:
 
+Tabla 4. Controles de debugging, con *c* = 2 y una semana.
+
 | Control | Esperado | Medido (*c* = 2, una semana) |
 |---|---|---|
 | ninguna latencia menor al piso | ≥ 90 min | mínimo ≥ 90 |
@@ -103,12 +111,16 @@ Además de los dos pases a mano, el de una publicación sola y el de la cola con
 
 Con el modelo controlado lo validamos contra los datos y calibramos la escala, que es lo único que no sale de la muestra. El tamaño de las cascadas y la fracción nociva no dependen de la escala, la latencia sí:
 
+Tabla 5. Latencia mediana de un mes según la escala, con dos semillas.
+
 | Escala | Latencia mediana en un mes (min), dos semillas |
 |---|---|
 | 50 | 104 · 111 |
 | 52 | 115 · 131 |
 | 53 | 130 · 135 |
 | 54 | 581 · 169 |
+
+Tabla 6. Validación contra los datos con escala 53.
 
 | Con escala 53 | Observado | Simulado |
 |---|---|---|
@@ -124,11 +136,13 @@ Nos quedamos con 53. Todo valida salvo el p99 del tamaño: el modelo genera la m
 
 Como no usamos AnyLogic, elegimos dos cosas del simulador que no vimos en clase y que resolvieron un problema concreto.
 
-La primera son los números aleatorios comunes. Cada publicación, cada generación y cada ítem de moderación tienen su propio generador, sembrado con su número, y los sorteos de Poisson, binomial y gamma se hacen por la inversa de la acumulada. Así dos escenarios ven las mismas publicaciones, y si la palanca cambia la media de un sorteo, el mismo número aleatorio da el mismo resultado o uno vecino. Con el piloto del cálculo de N, el desvío de la diferencia entre uno y dos moderadores dio 8,1 millones de impresiones nocivas, contra 20,9 de un escenario solo. Con escenarios independientes, N habría sido de unos 3.200 meses en vez de 238.
+La primera son los números aleatorios comunes. Cada publicación, cada generación y cada ítem de moderación tienen su propio generador, sembrado con su número, y los sorteos de Poisson, binomial y gamma se hacen por la inversa de la acumulada. Así dos escenarios ven las mismas publicaciones, y si la palanca cambia la media de un sorteo, el mismo número aleatorio da el mismo resultado o uno vecino. Con el piloto del cálculo de N, el desvío de la diferencia entre uno y dos moderadores dio 8,1 millones de impresiones nocivas, contra 20,9 de un escenario solo. Con escenarios independientes el desvío de la diferencia sería √2 · 20,9 ≈ 29,6, y N habría sido (29,6 / 8,06)² · 238 ≈ 3.200 meses en vez de 238.
 
 La segunda es la verificación automática con la teoría de filas. Como las variables de estado se anotan en cada evento, su promedio en el tiempo es exacto y no depende de un período de muestreo. Con eso comprobamos en cada corrida la ley de Little y la ocupación del balanceo de la tabla de debugging, en lugar de mirarlas a ojo en un gráfico.
 
 # Dificultades de codificación y cambios respecto de la parte A
+
+Tabla 7. Cambios respecto de la parte A.
 
 | Qué | En la parte A | En el simulador | Por qué |
 |---|---|---|---|
@@ -153,6 +167,8 @@ Fijamos el error admitido desde la decisión más chica que hay que poder distin
 
 N ≥ (s₀ · t₀,₀₂₅; ₅ / ε)² = (8,06 × 10⁶ · 2,571 / 1,34 × 10⁶)² = 238
 
+Tabla 8. Piloto para el cálculo de *N*.
+
 | Piloto | |
 |---|---|
 | desvío de la diferencia, s₀ | 8,06 millones de impresiones nocivas |
@@ -163,6 +179,8 @@ N ≥ (s₀ · t₀,₀₂₅; ₅ / ε)² = (8,06 × 10⁶ · 2,571 / 1,34 × 1
 Cada mes simulado tarda alrededor de medio minuto, así que 238 réplicas son unas dos horas por escenario. Si en la parte C no alcanza el tiempo para todos los escenarios, relajamos el error a un moderador entero, ±15.840 USD, y N baja a la cuarta parte.
 
 El resultado en las condiciones iniciales, con una corrida y con las seis réplicas del piloto:
+
+Tabla 9. Resultado en condiciones iniciales, por mes.
 
 | Condiciones iniciales, por mes | Una corrida | Media de 6 réplicas ± IC 95 % |
 |---|---|---|
