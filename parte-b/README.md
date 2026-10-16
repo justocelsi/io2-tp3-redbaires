@@ -3,9 +3,14 @@
 Todo lo de la segunda entrega va en esta carpeta. Lo de la parte A (el informe entregado, las decisiones
 D1 a D20 y el modelo de datos) está en [`../parte-a/`](../parte-a/README.md).
 
-**Estado: versión preliminar, lunes 12/10.** El simulador corre de punta a punta y está en
-[`simulador.ipynb`](simulador.ipynb), con los resultados ya calculados para leerlo sin correrlo.
-Falta revisarlo entre los tres, y el informe (máximo 10 páginas) todavía no está empezado.
+**Estado al viernes 16/10: lista para entregar.** El simulador está en [`simulador.ipynb`](simulador.ipynb),
+con los resultados ya calculados para leerlo sin correrlo. El informe es
+[`26C2-GXX-SIM-RedBaires.pdf`](26C2-GXX-SIM-RedBaires.pdf), 7 páginas medidas en Word (el máximo es 10);
+su fuente es [`informe-tp3b.md`](informe-tp3b.md) y se arma con `python armar_docx.py` (la plantilla de
+la cátedra va en esta carpeta, fuera del repo) y `./medir_word.sh`, que actualiza el índice, cuenta
+las páginas y exporta el PDF. Las figuras salen de [`figuras.py`](figuras.py).
+
+Falta completar en el encabezado y la portada el número de grupo y los apellidos y legajos de Ian y Gonzalo.
 
 ## Cómo correrlo
 
@@ -25,10 +30,10 @@ Falta revisarlo entre los tres, y el informe (máximo 10 páginas) todavía no e
 | Variables de estado, calculadas en los eventos y graficadas | pasos 3 y 4 | ✅ cola, ocupados, publicaciones vivas |
 | Stress test variando VD | paso 8 | ✅ c, volumen, fricción, degradación, clasificador |
 | Debugging documentado | pasos 5, 7 y 9 | ✅ hay que contarlo en el informe |
-| 2 funcionalidades no vistas en clase | ver abajo | a elegir |
-| Informe: lógicas y bloques | — | ⬜ |
-| Informe: dificultades y cambios respecto de la parte A | último paso del notebook | ⬜ pasarlo al informe |
-| Informe: N y resultado en condiciones iniciales, con IC | pasos 6 y 7 | ⬜ pasarlo al informe |
+| 2 funcionalidades no vistas en clase | ver abajo | ✅ las dos primeras de la lista |
+| Informe: lógicas y bloques | — | ✅ sección 1 del informe, con la figura de bloques |
+| Informe: dificultades y cambios respecto de la parte A | último paso del notebook | ✅ sección 4 |
+| Informe: N y resultado en condiciones iniciales, con IC | pasos 6 y 7 | ✅ sección 5: N = 238 meses y la tabla con IC de las 6 réplicas |
 
 ## Los bloques de AnyLogic y lo que usamos en Python
 
@@ -50,8 +55,8 @@ El tutor aceptó Python, pidiendo que mostremos la analogía con los bloques de 
 
 1. **Números aleatorios comunes.** Cada publicación, cada generación y cada ítem tienen su propio
    generador sembrado con su número, y los sorteos se hacen por la inversa de la acumulada. Así
-   dos escenarios ven las mismas publicaciones y la diferencia es de la palanca. Sin esto, N
-   sería impracticable (paso 7).
+   dos escenarios ven las mismas publicaciones y la diferencia es de la palanca. Sin esto, con
+   escenarios independientes N sería de unos 3.200 meses en vez de 238 (paso 7).
 2. **Variables de estado anotadas por evento** y promediadas en el tiempo, con las que
    comprobamos la ley de Little y la ocupación del balanceo (paso 9).
 3. Pendiente, si queremos una tercera: la cola con prioridad por toxicidad
@@ -76,7 +81,7 @@ Lo que salió de correr el simulador y conviene decidir juntos:
 
 | Hallazgo | Dónde | Qué hay que decidir |
 |---|---|---|
-| **N da unos 240 meses por escenario** con ±7.920 USD de error, aun con números aleatorios comunes (sin ellos serían unos 1.600) | paso 7 | aceptar unas dos horas de cómputo por escenario, relajar el error a un moderador entero (N baja a la cuarta parte) o pasar la réplica a una semana |
+| **N da unos 240 meses por escenario** con ±7.920 USD de error, aun con números aleatorios comunes (sin ellos serían unos 3.200) | paso 7 | aceptar unas dos horas de cómputo por escenario, relajar el error a un moderador entero (N baja a la cuarta parte) o pasar la réplica a una semana |
 | **El p99 del tamaño de las cascadas da la mitad del observado** (69 contra 151). El tamaño medio y el p90 dan bien | paso 5 | recalibrar los R para las cascadas grandes, como preveía la parte A |
 | **La cola de un moderador se arma de tarde y se vacía de noche**, y en los datos la latencia no sube en el pico | pasos 4 y 8 | es la limitación que ya declaramos en la A; contarla en el informe con el gráfico |
 | **Con 5 % más de volumen la cola no crece sin límite**, como decía la evaluación a priori, porque la tasa baja de noche | paso 8 | corregir esa frase en lo que se diga de la A |

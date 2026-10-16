@@ -15,3 +15,7 @@ parte-a/25C2-GXX-MC-TITULO.docx
 parte-a/numeros.txt
 # el informe sí se sube
 !parte-a/*.pdf
+!parte-b/*.pdf
+
+# Parte B: la misma plantilla
+parte-b/25C2-GXX-MC-TITULO.docx
