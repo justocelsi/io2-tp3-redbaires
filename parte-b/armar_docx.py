@@ -14,7 +14,7 @@ from docx.shared import Pt
 
 AQUI = Path(__file__).parent
 PLANTILLA = AQUI / "25C2-GXX-MC-TITULO.docx"   # de la cátedra, fuera del repo
-SALIDA = AQUI / "26C2-GXX-SIM-RedBaires.docx"
+SALIDA = AQUI / "26C2-G05-SIM-RedBaires.docx"
 
 pypandoc.convert_file(str(AQUI / "informe-tp3b.md"), "docx", outputfile=str(SALIDA),
                       extra_args=["--toc", "--toc-depth=2", "-M", "toc-title=Índice", f"--reference-doc={PLANTILLA}", f"--resource-path={AQUI}"])

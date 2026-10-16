@@ -5,12 +5,10 @@ D1 a D20 y el modelo de datos) está en [`../parte-a/`](../parte-a/README.md).
 
 **Estado al viernes 16/10: lista para entregar.** El simulador está en [`simulador.ipynb`](simulador.ipynb),
 con los resultados ya calculados para leerlo sin correrlo. El informe es
-[`26C2-GXX-SIM-RedBaires.pdf`](26C2-GXX-SIM-RedBaires.pdf), 7 páginas medidas en Word (el máximo es 10);
+[`26C2-G05-SIM-RedBaires.pdf`](26C2-G05-SIM-RedBaires.pdf), 7 páginas medidas en Word (el máximo es 10);
 su fuente es [`informe-tp3b.md`](informe-tp3b.md) y se arma con `python armar_docx.py` (la plantilla de
 la cátedra va en esta carpeta, fuera del repo) y `./medir_word.sh`, que actualiza el índice, cuenta
 las páginas y exporta el PDF. Las figuras salen de [`figuras.py`](figuras.py).
-
-Falta completar en el encabezado y la portada el número de grupo y los apellidos y legajos de Ian y Gonzalo.
 
 ## Cómo correrlo
 

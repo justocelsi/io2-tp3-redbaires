@@ -1,7 +1,7 @@
 ---
 title: "TP3B: RedBaires · simulador"
 subtitle: "Difusión de rumores y evaluación de contramedidas"
-author: "Justo Conrado Celsi (65548) · Ian [apellido y legajo] · Gonzalo [apellido y legajo]"
+author: "Grupo 05 · Justo Conrado Celsi (65548) · Ian Erlij (62736) · Gonzalo Ian Haro (65811)"
 date: "11.87 Investigación de Operaciones II · Segundo cuatrimestre 2026 · Instituto Tecnológico de Buenos Aires"
 ---
 
