@@ -81,7 +81,7 @@ Corrimos una semana por escenario, con dos días de calentamiento y la misma sem
 Tabla 3. Resultados del stress test, una semana por escenario.
 
 | Escenario | Nocivas servidas (millones) | Legítimas perdidas (millones) | Latencia mediana (min) | Cola máxima | Vivas, máximo |
-|---|---|---|---|---|---|
+|------------------------------|--------------|--------------|--------------|--------------|--------------|
 | hoy, *c* = 1 | 218,1 | 0 | 114 | 306 | 271 |
 | *c* = 2 | 212,2 | 3,7 | 91 | 16 | 261 |
 | *c* = 4 | 212,1 | 3,7 | 90 | 6 | 261 |
@@ -90,8 +90,14 @@ Tabla 3. Resultados del stress test, una semana por escenario.
 | fricción *u* = 5, *r* = 0,3 | 171,3 | 108,4 | 92 | 39 | 228 |
 | degradación | 175,9 | 61,7 | 93 | 134 | 229 |
 | clasificador 0,85 / 0,75, *c* = 1 | 241,0 | −11,9 | 2.639 | 9.026 | 293 |
+| volumen +50 %, *c* = 1 | 360,1 | — | 2.506 | 11.020 | 427 |
+| volumen +50 %, *c* = 2 | 320,4 | — | 91 | 36 | 378 |
+| volumen +50 %, *c* = 4 | 320,4 | — | 90 | 8 | 377 |
+| volumen +50 %, *c* = 10 | 320,4 | — | 90 | 1 | 377 |
+| *c* = 10 | 212,1 | 3,7 | 90 | 1 | 261 |
+| volumen ×2, *c* = 4 | 421,5 | — | 90 | 21 | 513 |
 
-El simulador respondió como esperábamos en casi todo. El segundo moderador lleva la latencia al piso de 90 minutos y del tercero en adelante no cambia nada, igual que en la evaluación a priori. La fricción y la degradación bajan las nocivas un 21 % y un 19 %, pero son las que más impresiones legítimas pierden. Las publicaciones vivas quedan acotadas en todos los escenarios. En los de volumen no informamos legítimas perdidas, porque cambian las publicaciones que llegan y no hay contra qué compararlas.
+El simulador respondió como esperábamos en casi todo. El segundo moderador lleva la latencia al piso de 90 minutos y del tercero en adelante no cambia nada, igual que en la evaluación a priori. Con 50 % más de volumen pasa lo mismo: un moderador solo deja crecer la cola hasta 11.020 ítems y la latencia mediana a 2.506 minutos, dos la devuelven al piso, y con el doble de volumen cuatro todavía alcanzan. La fricción y la degradación bajan las nocivas un 21 % y un 19 %, pero son las que más impresiones legítimas pierden. Las publicaciones vivas quedan acotadas en todos los escenarios. En los de volumen no informamos legítimas perdidas, porque cambian las publicaciones que llegan y no hay contra qué compararlas.
 
 Hubo dos resultados que no esperábamos. La evaluación a priori decía que con 5 % más de volumen y un moderador la cola crecería sin límite, y la figura 3 muestra que se arma de tarde y se vacía de noche, porque la tasa de llegadas baja mucho de madrugada. El clasificador nuevo con un solo moderador da más impresiones nocivas que hoy: marca el doble de ítems, la cola llega a 9.026 y las remociones llegan casi dos días tarde, cuando la cascada ya terminó; por eso también baja menos publicaciones legítimas que hoy y la columna de perdidas da negativa. Un clasificador mejor sin más moderadores empeora las cosas, y eso lo vamos a medir en la parte C.
 
@@ -120,17 +126,17 @@ Tabla 5. Latencia mediana de un mes según la escala, con dos semillas.
 | 53 | 130 · 135 |
 | 54 | 581 · 169 |
 
-Tabla 6. Validación contra los datos con escala 53.
+Tabla 6. Validación contra los datos con escala 53: una corrida de una semana y las seis réplicas de un mes del piloto.
 
-| Con escala 53 | Observado | Simulado |
-|---|---|---|
-| latencia mediana (min) | 139 | 135 |
-| fracción de impresiones nocivas | 0,41 | 0,41 |
-| tamaño medio de la cascada | 11,8 | 12,3 |
-| tamaño p90 | 28,5 | 34 |
-| tamaño p99 | 151 | 69 |
+| Con escala 53 | Observado | Simulado, una semana | Simulado, 6 meses ± IC 95 % |
+|---|---|---|---|
+| latencia mediana (min) | 139 | 135 | 135 ± 19 |
+| fracción de impresiones nocivas | 0,41 | 0,41 | 0,390 ± 0,009 |
+| tamaño medio de la cascada | 11,8 | 12,3 | 12,4 ± 0,1 |
+| tamaño p90 | 28,5 | 34 | 34,3 ± 0,5 |
+| tamaño p99 | 151 | 69 | 69,0 ± 0,9 |
 
-Nos quedamos con 53. Todo valida salvo el p99 del tamaño: el modelo genera la mitad de cascadas enormes que las reales, y son las que más daño hacen. La parte A preveía recalibrar los R si pasaba esto, y lo hacemos en la parte C.
+Nos quedamos con 53. La latencia mediana queda dentro del intervalo de las réplicas (135 ± 19 contra 139). En el tamaño de las cascadas, la media y el p90 quedan algo por encima de lo observado (12,4 ± 0,1 contra 11,8; 34,3 ± 0,5 contra 28,5) y el p99 queda a menos de la mitad (69,0 ± 0,9 contra 151), mientras que la fracción de nocivas queda unos puntos por debajo (0,390 ± 0,009 contra 0,41): el modelo genera cascadas medianas un poco más grandes y casi ninguna enorme, y esas son las que más daño hacen. La parte A preveía recalibrar los R si pasaba esto, y lo hacemos en la parte C.
 
 # Funcionalidades no vistas en clase
 

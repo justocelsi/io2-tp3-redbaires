@@ -25,7 +25,7 @@ d = docx.Document(SALIDA)
 for s in d.sections:
     for p in s.header.paragraphs:
         for r in p.runs:  # la plantilla parte «Grupo xx» y «2025 c2» en varios runs
-            r.text = {"xx": "XX", "5": "6", " c": " C"}.get(r.text, r.text)
+            r.text = {"xx": "05", "5": "6", " c": " C"}.get(r.text, r.text)
 
 
 def bordes(tabla):
