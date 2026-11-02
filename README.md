@@ -9,7 +9,7 @@ de las cuentas coordinadas.
 |---|---|---|---|
 | **TP3A** | modelo conceptual y modelo de datos, máximo 12 páginas | viernes 2/10, 12:00 · ✅ entregada | [`parte-a/`](parte-a/README.md) |
 | **TP3B** | el simulador, máximo 10 páginas | **viernes 16/10, 12:00** | [`parte-b/`](parte-b/README.md) · informe de 7 páginas y notebook, 16/10 |
-| TP3C | experimentación, máximo 10 páginas | viernes 13/11, 12:00 | — |
+| **TP3C** | experimentación, máximo 10 páginas | **viernes 13/11, 12:00** | [`parte-c/`](parte-c/README.md) · consigna, grilla y checklist |
 
 ## Cómo usar el repo
 
