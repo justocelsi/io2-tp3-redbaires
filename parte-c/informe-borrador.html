@@ -1,0 +1,110 @@
+<html><head><meta charset="utf-8"></head><body>
+
+<h1>2. Proceso de experimentación</h1>
+
+<h2>2.1 Procedimiento de experimentación</h2>
+
+<p>La experimentación se planificó antes de correr y en dos rondas. En la primera se movió una sola palanca por vez, dejando las demás como hoy, y cada alternativa recibió 30 réplicas de un mes. Esa ronda sirvió para descartar. En la segunda, las alternativas que quedaron se combinaron entre sí y se corrieron con el N calculado. Sobre las finalistas se aplicaron después los escenarios y el análisis de sensibilidad.</p>
+
+<p>Las alternativas se eligen con un solo criterio: el menor costo total por mes, siempre que se pierda como máximo el 15 % de las impresiones legítimas de hoy. Lo que pierde más queda descartado aunque sea más barato. El tope responde a lo que pide la consigna, contener el daño sin destruir el negocio, y a la pérdida de reputación que implica bajar contenido legítimo. Hacía falta porque, con los precios de la parte A, una impresión nociva cuesta 0,0059 USD y una legítima 0,0009, de modo que el menor costo sin tope se obtiene frenando casi todos los reenvíos, con el 78 % de las impresiones legítimas perdidas.</p>
+
+<p>Todas las alternativas usan las mismas semillas. Cada publicación, cada generación y cada ítem de moderación tienen su propio generador de números aleatorios, así que la réplica k de una alternativa ve las mismas publicaciones que la réplica k de hoy. Las comparaciones se hacen sobre la diferencia réplica a réplica, que tiene mucha menos variabilidad que cada alternativa por separado.</p>
+
+<p>La heurística fue la siguiente:</p>
+<ol>
+<li>Correr hoy y cada palanca sola, con 30 réplicas.</li>
+<li>Calcular el costo total y las legítimas perdidas de cada réplica contra la misma réplica de hoy, y descartar lo que supera el tope.</li>
+<li>Quedarse, por palanca, con las intensidades que respetan el tope.</li>
+<li>Calcular N con la diferencia de costo entre esas finalistas.</li>
+<li>Correr con N réplicas todas las combinaciones de las palancas, cada una prendida en su intensidad finalista o apagada.</li>
+<li>Comparar las combinaciones con intervalos de confianza de la diferencia apareada, con corrección de Bonferroni, y con la prueba de Friedman como segundo método.</li>
+<li>Mover sobre las finalistas los escenarios y los supuestos que los datos no pueden confirmar.</li>
+</ol>
+
+<p>Las combinaciones salen de prender o apagar cada una de las cuatro palancas. Son 2<sup>4</sup> = 16, menos las cuatro que llevan el clasificador nuevo con un solo moderador, que se descartan porque la cola se desborda. Quedan 12.</p>
+
+<h2>2.2 Variables de decisión: rangos y lógica de variación</h2>
+
+<p>Las variables de decisión son las cuatro palancas que la Dirección puede mover. Los valores se eligieron para cubrir el rango del enunciado con pocos puntos, porque cada alternativa cuesta unos cinco minutos de cómputo con 30 réplicas. Lo que se descartó antes de correr tiene un motivo medido en las corridas de prueba.</p>
+
+<p>Tabla 1. Valores probados de cada variable de decisión.</p>
+<table border="1">
+<tr><th>Variable</th><th>Hoy</th><th>Valores probados</th><th>Descartado y por qué</th></tr>
+<tr><td>Moderadores</td><td>1</td><td>1, 2 y 3</td><td>4 o más: en la prueba, con 2, 3 y 4 moderadores las impresiones nocivas dieron lo mismo</td></tr>
+<tr><td>Fricción a los reenvíos: umbral</td><td>sin fricción</td><td>5, 10 y 20 reenvíos</td><td>umbral 1, que queda para el stress test</td></tr>
+<tr><td>Fricción a los reenvíos: reducción</td><td>0</td><td>0,3 y 0,6</td><td>0,9, que queda para el stress test</td></tr>
+<tr><td>Degradación del alcance</td><td>no</td><td>0,3, 0,5 y 0,8</td><td></td></tr>
+<tr><td>Clasificador (precisión y recall)</td><td>el actual</td><td>0,85 y 0,75; 0,95 y 0,90, sólo con 2 moderadores</td><td>con 1 moderador: la cola llegó a 36.000 ítems en la prueba</td></tr>
+</table>
+
+<p>En la fricción, el umbral es cuántos reenvíos acumula una publicación antes de que se aplique el freno, y la reducción es cuánto baja su descendencia desde ese punto. La fricción pierde impresiones legítimas por dos vías, que se suman: las cascadas frenadas generan menos reenvíos, y además se pierde el 15 % de las impresiones legítimas servidas después del umbral, como indica el archivo de parámetros. La degradación es la fracción en que baja el alcance de una publicación detectada como parte de una campaña.</p>
+
+<p>El paso entre valores no es uniforme. En la fricción, los umbrales se duplican porque el tamaño de las cascadas es muy asimétrico: la media es de 11 eventos y el percentil 90 de 31, así que un umbral de 20 ya alcanza a pocas publicaciones. En la degradación, los tres valores cubren una baja leve, una media y una fuerte.</p>
+
+<h2>2.3 Condiciones del experimento</h2>
+
+<p>Cada réplica simula un mes de 30 días, que es el horizonte de la parte A, y descarta antes dos días de calentamiento. La plataforma no se detiene, así que las corridas son de tipo long run. La cola de moderación arranca vacía y, con un moderador cerca de la saturación, tarda en llegar al régimen, por lo que los dos primeros días no se miden. La corrida arranca un lunes y las variables de estado se promedian ponderando por el tiempo.</p>
+
+<p>El error admitido es el de la parte B: ±7.920 USD por mes, la mitad de lo que cuesta un moderador, que es la decisión más chica que hay que poder distinguir. N se calculó con la fórmula de la clase 02 sobre la diferencia apareada de costo entre cada par de finalistas de la primera ronda, y se tomó el par más exigente:</p>
+
+<p>N ≥ (s · t<sub>0,025; 29</sub> / ε)²</p>
+
+<p>Tabla 2. Cálculo de N con las 30 réplicas de la primera ronda.</p>
+<table border="1">
+<tr><th></th><th>Valor</th></tr>
+<tr><td>Par más exigente</td><td>degradación 0,3 contra clasificador 0,95 y 0,90 con 2 moderadores</td></tr>
+<tr><td>Desvío de la diferencia de costo, s</td><td>32.947 USD por mes</td></tr>
+<tr><td>t de Student, 29 grados de libertad</td><td>2,045</td></tr>
+<tr><td>Error admitido, ε</td><td>7.920 USD por mes</td></tr>
+<tr><td>N</td><td>73 meses por combinación</td></tr>
+</table>
+
+<p>Las diferencias contra hoy no se usaron para calcular N. Con un moderador, la cola se dispara en algunas réplicas y el desvío de esas diferencias es más del doble, lo que habría pedido unas 400 réplicas. La decisión se toma entre finalistas, y contra hoy las diferencias son de cientos de miles de USD, mucho mayores que el error admitido.</p>
+
+<h2>2.4 Medición de las variables de referencia y output de los experimentos</h2>
+
+<p>Las variables de referencia son las de la parte A: las impresiones nocivas servidas en el mes y las impresiones legítimas perdidas. Las legítimas perdidas se miden contra la misma réplica de hoy, sumando las que no se generaron por las cascadas frenadas y la pérdida directa por fricción. El costo total no es una variable de referencia: es el criterio de decisión. Se calcula después de simular, sumando el costo de las impresiones nocivas, el de las legítimas perdidas, el de las publicaciones legítimas bajadas por error, el de revisar cada ítem, los sueldos de los moderadores, los días de degradación y la amortización del clasificador nuevo. Por eso los escenarios que sólo cambian precios no necesitan volver a simular.</p>
+
+<p>Cada réplica devuelve una fila con las variables de referencia, la latencia de moderación (mediana, media y percentil 90), el tamaño de las cascadas, la ocupación de los moderadores, la cola media y los indicadores del peor episodio del mes, que son las 24 horas con la cola promedio más alta. Las filas de cada alternativa se exportan a un CSV propio y al final de cada ronda se arma una tabla resumen con los intervalos de confianza del 95 %.</p>
+
+<h2>2.5 Parameter variation y automatización</h2>
+
+<p>La variación de parámetros está en un diccionario que define cada alternativa por sus variables de decisión. El simulador recibe ese diccionario, una semilla y un escenario, y devuelve los resultados de una réplica. Una función corre todas las réplicas de todas las alternativas en cuatro procesos en paralelo, guarda el CSV de cada alternativa apenas termina y, si la corrida se corta, retoma desde la primera alternativa incompleta. Correr el notebook de experimentos de principio a fin ejecuta las dos rondas, calcula las variables de referencia y exporta los resultados.</p>
+
+<p>En cada réplica corren cuatro controles que frenan la ejecución si algo no cierra: que ninguna latencia sea menor que el piso de 90 minutos; que todo lo que entra salga, tanto publicaciones como ítems; la ley de Little en la cola, comparando el largo promedio con la tasa de entrada por la espera promedio medidas por separado; y que la ocupación medida de los moderadores coincida con la tasa de entrada al servicio por el tiempo medio de revisión. Las 420 réplicas de la primera ronda pasaron los cuatro controles. La primera ronda tardó 72 minutos.</p>
+
+<h1>3. Análisis y conclusiones</h1>
+
+<h2>3.1 Dificultades, errores y debugging de la experimentación</h2>
+
+<p>Tabla 3. Dificultades de la experimentación.</p>
+<table border="1">
+<tr><th>Contexto</th><th>Problema</th><th>Solución</th></tr>
+<tr><td>Criterio de la parte A: menor costo total</td><td>Con los precios del archivo, la alternativa más barata frenaba casi todos los reenvíos y perdía el 78 % de las impresiones legítimas</td><td>Menor costo con un tope del 15 % de legítimas perdidas</td></tr>
+<tr><td>Corrección del tutor sobre los hijos medios por tipo de cuenta</td><td>Al medirlos sin campañas se marca menos contenido y la latencia mediana bajó de 139 a 98 minutos: el modelo dejó de reproducir los datos</td><td>Se recalibró la escala de 53 a 57,3</td></tr>
+<tr><td>Escala cercana a la saturación de un moderador</td><td>Con escala 60 la cola de un moderador crece sin límite; la escala es frágil</td><td>Se probaron escalas vecinas y se declara como limitación</td></tr>
+<tr><td>Contenido ya revisado que vuelve a la cola</td><td>Una publicación aprobada puede volver a moderarse en la generación siguiente, y parecía un error</td><td>Se verificó que sale de la entidad «lote por generación» de la parte A y que el lazo siempre termina; se mantuvo, con un control sobre la última generación</td></tr>
+<tr><td>Un mes simulado tarda unos 40 segundos por proceso</td><td>Correr todas las alternativas con el N de la parte B, 238 réplicas, llevaba unas 10 horas, sin contar escenarios ni sensibilidad</td><td>Dos rondas, cuatro procesos en paralelo y corridas que retoman donde quedaron</td></tr>
+<tr><td>Hoy, con un moderador</td><td>En algunas réplicas la cola se dispara, y el desvío de las diferencias contra hoy pedía unas 400 réplicas</td><td>N se calculó con las diferencias entre finalistas</td></tr>
+</table>
+
+<h2>3.2 Cambios contra el modelo conceptual y el simulador de la parte B</h2>
+
+<p>Tabla 4. Cambios respecto de las partes A y B.</p>
+<table border="1">
+<tr><th>Qué</th><th>Antes</th><th>Ahora</th><th>Por qué</th></tr>
+<tr><td>Hijos medios por tipo de cuenta</td><td>medidos con todas las publicaciones</td><td>medidos sólo con las orgánicas</td><td>las campañas ya se multiplican aparte; medirlas también acá las contaba dos veces</td></tr>
+<tr><td>Escala</td><td>53</td><td>57,3</td><td>recalibrada a la latencia observada después de los cambios: 140,5 minutos simulados contra 138,7 observados</td></tr>
+<tr><td>Fracción removida de una publicación</td><td>se sumaba entre generaciones</td><td>se acumula de forma multiplicativa</td><td>la suma sobrestimaba el efecto de la moderación</td></tr>
+<tr><td>Parámetros y costos</td><td>algunos escritos en el código</td><td>calculados de los datos o leídos del archivo de parámetros</td><td>corrección del tutor; permite cambiar supuestos sin tocar el código</td></tr>
+<tr><td>Volumen</td><td>variable de decisión</td><td>parámetro del escenario</td><td>la empresa no lo decide</td></tr>
+<tr><td>Fin de semana</td><td>todos los días con la misma tasa; la parte A había medido un 20 %</td><td>sábados y domingos con un 17,8 % más de publicaciones, manteniendo el total semanal</td><td>medido día por día en la muestra, con una prueba de Mann-Whitney</td></tr>
+<tr><td>Peor episodio del mes</td><td>no se registraba</td><td>se registran la ocupación, la cola y las publicaciones vivas de las 24 horas con más cola</td><td>muestra si el consumo de recursos queda acotado, como prometió la parte A</td></tr>
+<tr><td>Costo de degradar</td><td>en la fórmula de la parte A, sin contar en el simulador</td><td>120 USD por cada publicación detectada de una cuenta grande (BROADCASTER o CREATOR), un día por detección</td><td>el archivo de parámetros lo define por cuenta grande y por día</td></tr>
+<tr><td>Criterio de decisión</td><td>menor costo total</td><td>menor costo con tope del 15 % de legítimas perdidas</td><td>ver la tabla 3</td></tr>
+<tr><td>Demora entre generaciones</td><td>gamma</td><td>gamma en el modelo base y mezcla de dos canales en la sensibilidad, con gráfico Q-Q</td><td>la parte A dejó la mezcla para la validación y la parte B la pasó a esta entrega</td></tr>
+<tr><td>Controles</td><td>revisión manual</td><td>cuatro controles automáticos en cada réplica</td><td>ver la sección 2.5</td></tr>
+<tr><td>Percentil 99 de las cascadas</td><td>63 eventos simulados contra 151 observados</td><td>sin cambios</td><td>recalibrarlo obligaba a validar de nuevo la propagación; se declara como limitación: las cascadas más grandes, que son las que más daño hacen, quedan por debajo de lo real</td></tr>
+</table>
+
+</body></html>
