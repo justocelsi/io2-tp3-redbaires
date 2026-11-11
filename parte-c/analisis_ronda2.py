@@ -99,22 +99,36 @@ def quiebre(df):
         filas.append(dict(alternativa=legible(combo), quiebre_usd=d_resto / d_noc if d_noc > 0 else np.inf))
     return pd.DataFrame(filas).sort_values("quiebre_usd")
 
+CORTO = {"hoy": "hoy", "c2": "2 mod.", "fr": "fricción", "dg": "degradación", "cl": "clasif."}
+
+def corto(combo):
+    return "hoy" if combo == "hoy" else " + ".join(CORTO[p] for p in combo.split("+"))
+
 def figuras(tabla):
-    t = tabla.sort_values("costo")
-    fig, ax = plt.subplots(figsize=(7, 4.2))
+    t = tabla.sort_values("costo").assign(et=lambda d: d.combo.map(corto))
+    fig, ax = plt.subplots(figsize=(7.5, 4.6))
     colores = ["#2f5d8a" if d else "#b0b0b0" for d in t.dentro]
-    ax.barh(t.alternativa, t.costo, xerr=t.ic_costo, color=colores, capsize=3)
+    ax.barh(t.et, t.costo, xerr=t.ic_costo, color=colores, capsize=3)
     ax.invert_yaxis(); ax.set_xlabel("Costo total por mes (miles de USD), con IC del 95 %")
     ax.set_xlim(t.costo.min() * 0.97, t.costo.max() * 1.01)
-    ax.set_title("Gris: pierde más del 15 % de las legítimas", fontsize=9, loc="left")
+    ax.text(0.99, 0.98, "en gris, pierden más del 15 %\nde las impresiones legítimas", transform=ax.transAxes,
+            ha="right", va="top", fontsize=8, color="#555555")
     fig.tight_layout(); fig.savefig("figuras/c3_costo_combinaciones.png", dpi=200); plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(7, 4.2))
-    ax.errorbar(t.perdidas, t.nocivas, xerr=t.ic_perdidas, yerr=t.ic_nocivas, fmt="o", color="#2f5d8a")
+    fig, ax = plt.subplots(figsize=(7.5, 5))
+    ax.errorbar(t.perdidas, t.nocivas, xerr=t.ic_perdidas, yerr=t.ic_nocivas, fmt="o",
+                color="#2f5d8a", ecolor="#2f5d8a")
+    desvio = {"dg": (6, 4), "c2+dg": (6, -10), "c2+fr+cl": (-6, -12), "fr+dg": (6, 4), "c2+fr+dg": (6, -10),
+              "fr": (6, 4), "c2+fr": (6, -10)}
     for _, r in t.iterrows():
-        ax.annotate(r.alternativa, (r.perdidas, r.nocivas), fontsize=7, xytext=(4, 3), textcoords="offset points")
+        dx, dy = desvio.get(r.combo, (6, 4))
+        ax.annotate(r.et, (r.perdidas, r.nocivas), fontsize=8, xytext=(dx, dy), textcoords="offset points",
+                    ha="right" if dx < 0 else "left")
     ax.axvline(TOPE * 100, ls="--", color="#b8483b"); ax.text(TOPE * 100 + 0.3, t.nocivas.max(), "tope 15 %", color="#b8483b", fontsize=8)
-    ax.set_xlabel("Legítimas perdidas (% de las de hoy)"); ax.set_ylabel("Impresiones nocivas por mes (millones)")
+    ax.set_xlim(-4, 34)
+    ax.set_xlabel("Impresiones legítimas perdidas (% de las de hoy)"); ax.set_ylabel("Impresiones nocivas por mes (millones)")
+    ax.text(0.01, 0.02, "2 mod. = 2 moderadores · clasif. = clasificador 95/90", transform=ax.transAxes,
+            ha="left", va="bottom", fontsize=8, color="#555555")
     fig.tight_layout(); fig.savefig("figuras/c4_nocivas_vs_legitimas.png", dpi=200); plt.close(fig)
 
 if __name__ == "__main__":

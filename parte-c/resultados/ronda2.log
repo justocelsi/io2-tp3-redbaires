@@ -1,0 +1,14 @@
+2026-11-11 21:13:40 hoy: 43 réplicas en 822 s, controles fallidos: 0
+2026-11-11 21:24:38 dg: 43 réplicas en 657 s, controles fallidos: 0
+2026-11-11 21:35:45 fr: 43 réplicas en 667 s, controles fallidos: 0
+2026-11-11 21:46:24 c2: 43 réplicas en 639 s, controles fallidos: 0
+2026-11-11 21:57:29 c2+cl: 43 réplicas en 665 s, controles fallidos: 0
+2026-11-11 21:57:29 ronda terminada
+2026-11-11 22:16:11 fr+dg: 73 réplicas en 1122 s, controles fallidos: 0
+2026-11-11 22:34:29 c2+dg: 73 réplicas en 1098 s, controles fallidos: 0
+2026-11-11 22:52:00 c2+dg+cl: 73 réplicas en 1051 s, controles fallidos: 0
+2026-11-11 23:09:32 c2+fr: 73 réplicas en 1053 s, controles fallidos: 0
+2026-11-11 23:25:47 c2+fr+cl: 73 réplicas en 975 s, controles fallidos: 0
+2026-11-11 23:42:12 c2+fr+dg: 73 réplicas en 985 s, controles fallidos: 0
+2026-11-11 23:57:37 c2+fr+dg+cl: 73 réplicas en 925 s, controles fallidos: 0
+2026-11-11 23:57:37 ronda terminada
