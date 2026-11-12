@@ -4,7 +4,9 @@ sobre las finalistas de la ronda 2 y hoy, con 30 réplicas de un mes y las misma
 Uso, desde parte-c/:  ../.venv/bin/python sensibilidad.py c2+dg+cl c2+cl
 (los argumentos son combinaciones de la ronda 2; hoy se agrega siempre)
 """
-import json, sys
+import json, sys, os, time
+import multiprocessing as mp
+import numpy as np, pandas as pd
 
 for celda in json.load(open("simulador.ipynb"))["cells"]:
     if "modelo" in celda["metadata"].get("tags", []):
